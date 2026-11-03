@@ -1,4 +1,4 @@
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
 import {
   Keyboard,
@@ -14,6 +14,8 @@ import {
 import { supabase } from "../lib/supabase";
 
 export default function RegisterScreen() {
+  const router = useRouter();
+
   const { role } = useLocalSearchParams<{
     role?: string;
   }>();
@@ -80,10 +82,16 @@ export default function RegisterScreen() {
       }
 
       if (!data.session) {
-        setSuccess("Check your email for a verification link.");
-      } else {
-        setSuccess("Account created. You're signed in!");
-      }
+  setSuccess("Check your email for a verification link.");
+  return;
+}
+
+// Supabase successfully created an authenticated session
+if (role === "coach") {
+  router.replace("/coach-dashboard");
+} else {
+  router.replace("/athlete-dashboard");
+}
     } catch {
       setError("Unable to connect to Supabase. Please try again.");
     } finally {
