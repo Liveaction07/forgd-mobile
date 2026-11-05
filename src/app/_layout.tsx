@@ -1,24 +1,42 @@
-import { Stack, ThemeProvider, DarkTheme } from "expo-router";
+import { DarkTheme, Stack, ThemeProvider } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 
-SplashScreen.preventAutoHideAsync();
+import { AuthProvider, useAuth } from "../contexts/AuthContext";
 
-export default function RootLayout() {
+void SplashScreen.preventAutoHideAsync();
+
+function AppNavigator() {
+  const { loading } = useAuth();
+
   useEffect(() => {
-    SplashScreen.hide();
-  }, []);
+    if (!loading) {
+      void SplashScreen.hideAsync();
+    }
+  }, [loading]);
+
+  if (loading) {
+    return null;
+  }
 
   return (
+    <Stack
+      screenOptions={{
+        headerShown: false,
+        contentStyle: {
+          backgroundColor: "#080b0b",
+        },
+      }}
+    />
+  );
+}
+
+export default function RootLayout() {
+  return (
     <ThemeProvider value={DarkTheme}>
-      <Stack
-        screenOptions={{
-          headerShown: false,
-          contentStyle: {
-            backgroundColor: "#080b0b",
-          },
-        }}
-      />
+      <AuthProvider>
+        <AppNavigator />
+      </AuthProvider>
     </ThemeProvider>
   );
 }

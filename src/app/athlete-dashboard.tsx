@@ -1,12 +1,16 @@
 import { StyleSheet, Text, View } from "react-native";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function AthleteDashboard() {
+  const { loading, user } = useAuth();
+
+  console.log("Auth loading:", loading);
+  console.log("Auth user:", user?.email);
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>WELCOME TO FORGD</Text>
-      <Text style={styles.subtitle}>
-        Athlete Dashboard
-      </Text>
+      <Text style={styles.subtitle}>Athlete Dashboard</Text>
     </View>
   );
 }
