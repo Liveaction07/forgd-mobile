@@ -63,6 +63,19 @@ export default function AthleteDashboard() {
           SIGN OUT
         </Text>
       </Pressable>
+
+      <Pressable
+  onPress={() => router.push("/coach-dashboard")}
+>
+  <Text style={{ color: "#ffffff", marginTop: 20 }}>
+    TEST COACH ACCESS
+  </Text>
+</Pressable>
+
+
+
+
+
     </View>
   );
 }
