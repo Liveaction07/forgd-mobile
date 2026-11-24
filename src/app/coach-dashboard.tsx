@@ -7,13 +7,15 @@ import {
   Pressable,
   Alert,
 } from "react-native";
-
+import { supabase } from "../lib/supabase";
 import { useAuth } from "../contexts/AuthContext";
 
 export default function CoachDashboard() {
   const router = useRouter();
+ 
 
   const { loading, user, signOut } = useAuth();
+
 
   console.log("Coach auth loading:", loading);
   console.log("Coach auth user:", user?.email);
@@ -32,7 +34,29 @@ export default function CoachDashboard() {
       );
     }
   }
+async function handleInviteAthlete() {
+  try {
+    const { data, error } = await supabase.rpc(
+      "create_coach_invitation"
+    );
 
+    if (error) {
+      throw error;
+    }
+
+    Alert.alert(
+      "Athlete Invitation",
+      `Share this code with your athlete:\n\n${data}`
+    );
+  } catch (error) {
+    console.error("Invitation error:", error);
+
+    Alert.alert(
+      "Invitation Failed",
+      "Unable to generate an invitation code."
+    );
+  }
+}
   if (loading) {
     return (
       <View style={styles.container}>
@@ -56,7 +80,15 @@ export default function CoachDashboard() {
       <Text style={styles.email}>
         Signed in as: {user?.email ?? "No active session"}
       </Text>
-
+      {/* INVITE ATHLETE BUTTON */}
+<Pressable
+  style={styles.inviteButton}
+  onPress={handleInviteAthlete}
+>
+  <Text style={styles.inviteButtonText}>
+    + INVITE ATHLETE
+  </Text>
+</Pressable>
       {/* LOGOUT BUTTON */}
       <Pressable
         style={styles.logoutButton}
@@ -118,4 +150,19 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     letterSpacing: 1,
   },
+  inviteButton: {
+  backgroundColor: "#41e6b4",
+  borderRadius: 8,
+  paddingVertical: 16,
+  paddingHorizontal: 40,
+  marginTop: 32,
+  alignItems: "center",
+},
+
+inviteButtonText: {
+  color: "#080b0b",
+  fontSize: 14,
+  fontWeight: "bold",
+  letterSpacing: 1,
+},
 });
