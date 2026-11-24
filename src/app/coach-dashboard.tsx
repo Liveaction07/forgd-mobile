@@ -67,13 +67,7 @@ export default function CoachDashboard() {
         </Text>
       </Pressable>
 
-      <Pressable
-  onPress={() => router.push("/athlete-dashboard")}
->
-  <Text style={{ color: "#ffffff", marginTop: 20 }}>
-    TEST ATHLETE ACCESS
-  </Text>
-</Pressable>
+      
     </View>
   );
 }
